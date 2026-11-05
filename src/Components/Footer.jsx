@@ -16,7 +16,7 @@ function Footer() {
       <div className='col-3 ps-5 pt-3'>
         <h3><FaTruckFast  className="me-2" /> Daily Cart</h3>
         <p className='pb-2 '>Designed and Build with all the love in the World
-          by the <br /> Luminar team with the help of our Contributers</p>
+          by the Luminar team with the help of our Contributers</p>
         <p>Code liecenced luminar,doc CC BY 3.0.</p>
         <p>Currently v5.3.2</p>
       </div>
