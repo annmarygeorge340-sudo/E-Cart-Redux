@@ -54,9 +54,6 @@ const  userWishlist = useSelector(state=>state.wishlistReducer)
 
 
      }
-
-
-
     </div>
     </>
   )
