@@ -1,37 +1,86 @@
 import { faStar } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Header from '../Components/Header'
+import { useParams } from 'react-router-dom'
+import { all } from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import Swal from 'sweetalert2'
+import { addtoWishlist } from '../Redux/Slices/WishlistSlice'
+
 
 function View() {
+
+  const {id} = useParams()
+  console.log(id);
+  const {allProducts} = useSelector(state => state.productReducer)
+  const [product,setProduct]=useState({})
+const userWishlist = useSelector(state=>state.wishlistReducer)
+const dispatch = useDispatch()
+console.log(userWishlist);
+
+useEffect(()=>{
+setProduct(allProducts?.find(item=>item.id==id))
+},[])
+console.log(allProducts);
+
+
+const handleWishlist = ()=>{
+  //check the product is alredy in the wishlist
+const existingItem=userWishlist?.find(item=>item?.id==product?.id)
+
+if (existingItem) {
+  Swal.fire({
+    title:'SORRY',
+    text:'product alredy exist',
+    icon:'error',
+    confirmButtonText:'ok'
+  })
+}else{
+  dispatch(addtoWishlist(product))
+}
+
+}
+  
+
   return (
-    <div className='container my-5  pt-5'>
-<div style={{height:"75vh"}} className='row align-items-center'>
 
-  <div className="col-lg-6  text-center my-5 pt-5">
-<img  width={"70px"} height={"70px"} className='img-fluid'  src="https://png.pngtree.com/png-vector/20250215/ourlarge/pngtree-red-nail-polish-bottle-png-image_15475954.png" alt="product" />
-
-<div className='mt-5'>
-  <button className='btn  me-5' style={{ backgroundColor: '#f81f1f' }}>ADD TO WISHLIST</button>
-  <button className='btn' style={{ backgroundColor: '#09d539' }}>ADD TO CART</button>
-</div>
-
+<>
+   <Header/>
+  
+      <div className='container my-5  pt-5'>
+  <div  className='row align-items-center'>
+  
+    <div className="col-lg-6  text-center my-5 pt-5">
+  <img style={ {height:"500px"} } className='img-fluid'  src={product?.thumbnail} alt="product" />
+  
+  <div className='mt-5'>
+    <button onClick={handleWishlist} className='btn  me-5' style={{ backgroundColor: '#f81f1f' }}>ADD TO WISHLIST</button>
+    <button className='btn' style={{ backgroundColor: '#09d539' }}>ADD TO CART</button>
   </div>
-  <div className="col-lg-6 ">
-<h3 className='fw-bold'>Title</h3>
-<h2 className='fw-bold'>$ 30</h2>
-<h4 className='fw-bold'>Brand :</h4>
-<h4 className='fw-bold'>Category :</h4>
-<h4 className='fw-bold'>Description :</h4>
-<h5 className='fw-bold'>Client Reviews</h5>
-
-<div className='border rounded shadow my-5 p-2'>
-<p><span className='fw-bolder'>Name : </span> Message</p>
-<p>Rating : 5 <FontAwesomeIcon icon={faStar} className='text-warning' /></p>
-</div>
-  </div>
-
-</div>
+  
     </div>
+    <div className="col-lg-6 ">
+  <h3 className='fw-bold'>{product?.title}</h3>
+  <h2 className='fw-bold'>${product?.price}</h2>
+  <h4 className='fw-bold'>Brand :{product?.brand}</h4>
+  <h4 className='fw-bold'>{product?.category}</h4>
+  <h4 className='fw-bold'>{product?.description} :</h4>
+  <h5 className='fw-bold'>Client Reviews:</h5>
+  
+  {
+    product?.reviews?.map(item=>(
+      <div className='border rounded shadow my-5 p-2'>
+  <p><span className='fw-bolder'>Name :{item?.reviewerName} </span> Message:{item?.comment}</p>
+  <p>Rating : {item?.rating}<FontAwesomeIcon icon={faStar} className='text-warning' /></p>
+  </div>
+    ))
+  }
+    </div>
+  
+  </div>
+      </div>
+</>
   )
 }
 
