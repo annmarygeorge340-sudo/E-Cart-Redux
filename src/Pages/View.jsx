@@ -5,8 +5,9 @@ import Header from '../Components/Header'
 import { useParams } from 'react-router-dom'
 import { all } from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import Swal from 'sweetalert2'
 import { addtoWishlist } from '../Redux/Slices/WishlistSlice'
+import Swal from 'sweetalert2'
+import { addCart } from '../Redux/Slices/CartSlice'
 
 
 function View() {
@@ -16,6 +17,7 @@ function View() {
   const {allProducts} = useSelector(state => state.productReducer)
   const [product,setProduct]=useState({})
 const userWishlist = useSelector(state=>state.wishlistReducer)
+const userCart = useSelector(state=>state.cartReducer)
 const dispatch = useDispatch()
 console.log(userWishlist);
 
@@ -32,16 +34,35 @@ const existingItem=userWishlist?.find(item=>item?.id==product?.id)
 if (existingItem) {
   Swal.fire({
     title:'SORRY',
-    text:'product alredy exist',
+    text:'oops!!product alredy exist',
     icon:'error',
     confirmButtonText:'ok'
+
   })
 }else{
   dispatch(addtoWishlist(product))
 }
 
 }
+
+
+const handleCart = ()=>{
+  //check the product is alredy in the wishlist
+const existingItem=userCart?.find(item=>item?.id==product?.id)
+dispatch(addCart(product))
+  Swal.fire({
+title:'SUCCESS',
+    text:existingItem? `${existingItem.title}quantity increased` : "product added successfully",
+    icon:'success',
+    confirmButtonText:'ok'
+    
+  })
+
+}
+ 
   
+
+
 
   return (
 
@@ -56,7 +77,7 @@ if (existingItem) {
   
   <div className='mt-5'>
     <button onClick={handleWishlist} className='btn  me-5' style={{ backgroundColor: '#f81f1f' }}>ADD TO WISHLIST</button>
-    <button className='btn' style={{ backgroundColor: '#09d539' }}>ADD TO CART</button>
+    <button onClick={handleCart} className='btn' style={{ backgroundColor: '#09d539' }}>ADD TO CART</button>
   </div>
   
     </div>

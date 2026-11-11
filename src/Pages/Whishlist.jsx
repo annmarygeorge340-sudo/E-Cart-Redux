@@ -4,11 +4,35 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react'
 import Card from 'react-bootstrap/Card';
 import Header from '../Components/Header'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { removeoWishlistItem } from '../Redux/Slices/WishlistSlice';
+import Swal from 'sweetalert2'
+import { addCart } from '../Redux/Slices/CartSlice'
 
 function Whishlist() {
 const  userWishlist = useSelector(state=>state.wishlistReducer)
+const dispatch = useDispatch()
+const userCart = useSelector(state=>state.cartReducer)
+
+
+
+const handleCart = (product)=>{
+  //check the product is alredy in the wishlist
+const existingItem=userCart?.find(item=>item?.id==product?.id)
+dispatch(addCart(product))
+dispatch(removeoWishlistItem(product.id))
+  Swal.fire({
+title:'SUCCESS',
+    text:existingItem? `${existingItem.title}quantity increased` : "product added successfully",
+    icon:'success',
+    confirmButtonText:'ok'
+    
+  })
+
+}
+
+
 
   return (
   <>
@@ -28,12 +52,12 @@ const  userWishlist = useSelector(state=>state.wishlistReducer)
           {/* cards */}
 
           <Card>
-            <Card.Img className='shadow' style={{ height: "250px" }} variant="top" src={item?.thumbmail} />
+            <Card.Img className='shadow' style={{ height: "250px" }} variant="top" src={item?.thumbnail} />
             <Card.Body className='text-center'>
               <Card.Title>{item?.title}</Card.Title>
               <div className='d-flex justify-content-evenly'>
-              <button className='btn btn-danger'><FontAwesomeIcon icon={faHeartCircleXmark} /></button>     
-              <button className='btn btn-success'><FontAwesomeIcon icon={faCartPlus} /></button>         
+              <button onClick={()=>dispatch(removeoWishlistItem(item?.id))} className='btn btn-danger fs-5'><FontAwesomeIcon icon={faHeartCircleXmark} /></button>     
+              <button onClick={()=>handleCart(item)} className='btn btn-success fs-5'><FontAwesomeIcon icon={faCartPlus} /></button>         
               </div>
             </Card.Body>
           </Card>

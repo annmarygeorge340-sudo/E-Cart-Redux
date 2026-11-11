@@ -13,6 +13,7 @@ import { searchProduct } from "../Redux/Slices/ProductSlice";
 
 function Header({insideProduct}) {
   const userWishlist = useSelector(state=>state.wishlistReducer)
+  const userCart =  useSelector(state=>state.cartReducer)
   const dispatch = useDispatch()
   return (
    <Navbar expand="lg" className=" fixed-top"  style={{  backgroundColor: '#263238' }}>
@@ -25,7 +26,7 @@ function Header({insideProduct}) {
               <input onChange={e=>dispatch(searchProduct(e.target.value))} type="text" className='form-control' placeholder='Search your Products' />
             </Nav.Item>}
             <Link to={"/Whishlist"} className='text-light text-decoration-none fw-bold ms-5'><FontAwesomeIcon icon={faHeart} className='btn me-2' style={{ backgroundColor: '#d11212' }}/>Wishlist<Badge pill bg="secondary">{userWishlist?.length}</Badge></Link>
-            <Link to={"/Cart"} className='text-light text-decoration-none fw-bold ms-5'><FontAwesomeIcon icon={faCartPlus}  className='btn  me-2' style={{ backgroundColor: '#13c43c' }}/>Cart<Badge pill bg="secondary">10</Badge></Link>
+            <Link to={"/Cart"} className='text-light text-decoration-none fw-bold ms-5'><FontAwesomeIcon icon={faCartPlus}  className='btn  me-2' style={{ backgroundColor: '#13c43c' }}/>Cart<Badge pill bg="secondary">{userCart?.length}</Badge></Link>
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -11,7 +11,7 @@ addtoWishlist:(state,action)=>{
 
 //remove from wishlist-wishlist component- id vechit
 removeoWishlistItem:(state,action)=>{
-  return  state.filter(item=>item.id!=action.payload)
+  return  state.filter(item=>item.id!=action.payload)//action.payload il irikne full product ahn
 }
 
  }
